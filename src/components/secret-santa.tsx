@@ -20,7 +20,7 @@ export function SecretSanta() {
   // Reset secret santa when we remove file
   useEffect(() => {
     resetSecretSanta();
-  }, [xlsx, resetSecretSanta]);
+  }, [xlsx]);
 
   if (!xlsx) {
     return (

@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Headers } from "@/consts";
 import type { SecretSantaResult } from "@/types";
 
 interface SecretSantaResultProps {
@@ -14,11 +15,12 @@ interface SecretSantaResultProps {
 
 export function SecretSantaResult({ data }: SecretSantaResultProps) {
   const headers = [
-    "Employee Name",
-    "Employee Email",
-    "Secret Child Name",
-    "Secret Child Email",
+    Headers.EmployeeName,
+    Headers.EmployeeEmail,
+    Headers.SecretChildName,
+    Headers.SecretChildEmail,
   ];
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <h1 className="my-4 text-2xl font-bold text-center">Result</h1>
