@@ -5,7 +5,6 @@ interface FileUploadProps {
 }
 
 export function FileUpload({ uploadFile }: FileUploadProps) {
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
