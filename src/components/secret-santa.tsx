@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { File, XIcon } from "lucide-react";
 
 export function SecretSanta() {
-  const { xlsx, uploadXLSX, reset } = useXLSX();
+  const { xlsx, headers, data, uploadXLSX, reset } = useXLSX();
 
   if (!xlsx) {
     return (
@@ -33,7 +33,7 @@ export function SecretSanta() {
             <span className="sr-only">Remove file</span>
           </Button>
         </div>
-        <SecretSantaTable />
+        <SecretSantaTable headers={headers} data={data} />
       </div>
     </section>
   );

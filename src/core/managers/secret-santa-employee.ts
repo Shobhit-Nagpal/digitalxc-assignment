@@ -1,6 +1,6 @@
 import { Email } from "@/types";
 
-export class Employee {
+export class SecretSantaEmployee {
   #name: string;
   #email: Email;
 
