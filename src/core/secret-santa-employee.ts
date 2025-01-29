@@ -29,10 +29,10 @@ export class SecretSantaEmployee {
   }
 
   getName(): string {
-    return this.#name
+    return this.#name;
   }
 
   getEmail(): Email {
-    return this.#email
+    return this.#email;
   }
 }

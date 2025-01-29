@@ -2,10 +2,14 @@ import { useXLSX } from "@/hooks/use-xlsx";
 import { FileUpload } from "./file-upload";
 import { SecretSantaTable } from "./secret-santa-table";
 import { Button } from "./ui/button";
-import { File, XIcon } from "lucide-react";
+import { FilePreview } from "./file-preview";
+import { useSecretSanta } from "@/hooks/use-secret-santa";
+import { Loader2 } from "lucide-react";
+import { SecretSantaResult } from "./secret-santa-result";
 
 export function SecretSanta() {
   const { xlsx, headers, data, uploadXLSX, reset } = useXLSX();
+  const { result, loading, generateSecretSanta } = useSecretSanta();
 
   if (!xlsx) {
     return (
@@ -18,22 +22,13 @@ export function SecretSanta() {
   return (
     <section className="mt-10">
       <div className="flex flex-col items-center space-y-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex items-center space-x-3 transition-all duration-300 hover:shadow-lg">
-          <File className="w-6 h-6 text-blue-500" />
-          <p className="font-medium text-gray-700 dark:text-gray-200">
-            {xlsx.name}
-          </p>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => reset()}
-            className="ml-2 text-gray-500 hover:text-red-500 transition-colors duration-200"
-          >
-            <XIcon className="w-4 h-4" />
-            <span className="sr-only">Remove file</span>
-          </Button>
-        </div>
+        <FilePreview name={xlsx.name} onClick={() => reset()} />
         <SecretSantaTable headers={headers} data={data} />
+        <Button onClick={() => generateSecretSanta()} disabled={loading}>
+          Generate
+        </Button>
+        {loading && <Loader2 className="h-6 w-6 animate-spin" />}
+        {result && <SecretSantaResult />}
       </div>
     </section>
   );

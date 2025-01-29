@@ -14,14 +14,16 @@ interface SecretSantaTableProps {
 }
 
 export function SecretSantaTable({ headers, data }: SecretSantaTableProps) {
-  console.log("DATA: ", data)
+
+  const rows = data.map((row) => row.slice(0, 2));
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <Table>
         <TableCaption>List of employees for secret santa.</TableCaption>
         <TableHeader>
           <TableRow>
-            {headers.map((header, idx) => (
+            {headers.slice(0, 2).map((header, idx) => (
               <TableHead key={idx} className="text-center">
                 {header}
               </TableHead>
@@ -29,7 +31,7 @@ export function SecretSantaTable({ headers, data }: SecretSantaTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((row, idx) => (
+          {rows.map((row, idx) => (
             <TableRow key={idx}>
               {row.map((value, idx) => (
                 <TableCell key={idx} className="text-center">
