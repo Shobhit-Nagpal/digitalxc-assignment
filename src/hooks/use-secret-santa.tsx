@@ -2,23 +2,32 @@
 
 import { useState } from "react";
 import { useToast } from "./use-toast";
+import { SecretSantaResult } from "@/types";
 
 export function useSecretSanta() {
   const { toast } = useToast();
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState<SecretSantaResult[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const generateSecretSanta = async () => {
+  const generateSecretSanta = async (data: string[][]) => {
     try {
       setLoading(true);
       const req = await fetch("/api/generate", {
         method: "POST",
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          data,
+        }),
       });
 
       const res = await req.json();
-      //      setSecretSanta(res.data);
+      setResult(res.data as SecretSantaResult[]);
+
+      toast({
+        title: "Secret Santa Generated!",
+      });
+
     } catch (err) {
+      console.error(err)
       toast({
         title: "Failed to generate secret santa",
         description: "Please try again",
@@ -29,9 +38,14 @@ export function useSecretSanta() {
     }
   };
 
+  const reset = () => {
+    setResult(null);
+  }
+
   return {
     result,
     loading,
     generateSecretSanta,
+    reset,
   };
 }

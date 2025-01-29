@@ -6,10 +6,21 @@ import { FilePreview } from "./file-preview";
 import { useSecretSanta } from "@/hooks/use-secret-santa";
 import { Loader2 } from "lucide-react";
 import { SecretSantaResult } from "./secret-santa-result";
+import { useEffect } from "react";
 
 export function SecretSanta() {
   const { xlsx, headers, data, uploadXLSX, reset } = useXLSX();
-  const { result, loading, generateSecretSanta } = useSecretSanta();
+  const {
+    result,
+    loading,
+    generateSecretSanta,
+    reset: resetSecretSanta,
+  } = useSecretSanta();
+
+  // Reset secret santa when we remove file
+  useEffect(() => {
+    resetSecretSanta();
+  }, [xlsx, resetSecretSanta]);
 
   if (!xlsx) {
     return (
@@ -20,15 +31,15 @@ export function SecretSanta() {
   }
 
   return (
-    <section className="mt-10">
+    <section className="my-10">
       <div className="flex flex-col items-center space-y-4">
         <FilePreview name={xlsx.name} onClick={() => reset()} />
         <SecretSantaTable headers={headers} data={data} />
-        <Button onClick={() => generateSecretSanta()} disabled={loading}>
+        <Button onClick={() => generateSecretSanta(data)} disabled={loading}>
           Generate
         </Button>
         {loading && <Loader2 className="h-6 w-6 animate-spin" />}
-        {result && <SecretSantaResult />}
+        {result && <SecretSantaResult data={result} />}
       </div>
     </section>
   );
