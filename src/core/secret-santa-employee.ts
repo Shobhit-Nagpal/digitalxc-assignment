@@ -35,4 +35,12 @@ export class SecretSantaEmployee {
   getEmail(): Email {
     return this.#email;
   }
+
+  getCurrentChild(): Email {
+    return this.#currentChild || "";
+  }
+
+  getPreviousYearChild(): Email {
+    return this.#previousYearChild || "";
+  }
 }

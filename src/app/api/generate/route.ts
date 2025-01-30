@@ -7,10 +7,11 @@ export async function POST(req: NextRequest) {
   try {
     const { data } = await req.json();
 
-    const currentData = data.slice(0, 2);
-    const prevYearData = data.slice(2, data.length);
+    const prevData = data.map((row: string[]) =>
+      row.length > 2 ? row.slice(2, row.length) : [],
+    );
 
-    manager.createPairings(currentData, prevYearData);
+    manager.createPairings(data, prevData);
 
     const result = manager.getResult();
 
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
       },
     );
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return NextResponse.json(
       {
         message: "Internal Server Error",

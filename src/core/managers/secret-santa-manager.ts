@@ -5,18 +5,15 @@ export class SecretSantaManager {
   private static instance: SecretSantaManager | null = null;
   private employees: SecretSantaEmployee[] = [];
 
-  private constructor() {}
-
   createPairings(data: string[][], previousYearData?: string[][]) {
     this.employees = [];
-
     this.employees = data.map((row) => new SecretSantaEmployee(row[0], row[1]));
 
+    // Set previous year assignments if available
     if (previousYearData) {
       for (const row of previousYearData) {
-        const employeeEmail = row[0];
-        const previousChildEmail = row[3];
-
+        const employeeEmail = row[1]; // Using email from column 2
+        const previousChildEmail = row[3]; // Using email from column 4
         const employee = this.findEmployeeByEmail(employeeEmail);
         if (employee) {
           employee.setPreviousYearChild(previousChildEmail);
@@ -32,20 +29,19 @@ export class SecretSantaManager {
     // Remove invalid edges (self-assignments and previous year matches)
     for (let i = 0; i < n; i++) {
       const currentEmployee = this.employees[i];
-
       for (let j = 0; j < n; j++) {
+        const potentialChild = this.employees[j];
+
         // Remove self-assignments
         if (i === j) {
           adjacencyMatrix[i][j] = false;
           continue;
         }
 
-        const potentialChild = this.employees[j];
-
         // Remove previous year assignments
         if (
           currentEmployee.hasPreviousYearChild() &&
-          currentEmployee.getEmail() === potentialChild.getEmail()
+          currentEmployee.getPreviousYearChild() === potentialChild.getEmail()
         ) {
           adjacencyMatrix[i][j] = false;
         }
@@ -53,42 +49,46 @@ export class SecretSantaManager {
     }
 
     // Find valid assignments using DFS
-    const visited = new Set<number>();
-    const assigned = new Set<number>();
+    const assigned = new Array(n).fill(false);
     const path: number[] = [];
 
-    const findValidPath = (current: number): boolean => {
-      if (path.length === n && adjacencyMatrix[current][path[0]]) {
-        // Found valid cycle
+    const findValidPath = (
+      current: number,
+      start: number,
+      count: number,
+    ): boolean => {
+      // If we've assigned everyone and can complete the cycle back to start
+      if (count === n && adjacencyMatrix[current][start]) {
+        path.push(start);
         return true;
       }
 
-      visited.add(current);
+      // Try each potential child
       for (let next = 0; next < n; next++) {
-        if (!adjacencyMatrix[current][next] || assigned.has(next)) continue;
+        if (!adjacencyMatrix[current][next] || assigned[next]) continue;
 
+        assigned[next] = true;
         path.push(next);
-        assigned.add(next);
 
-        if (findValidPath(next)) return true;
+        if (findValidPath(next, start, count + 1)) {
+          return true;
+        }
 
+        assigned[next] = false;
         path.pop();
-        assigned.delete(next);
       }
-      visited.delete(current);
+
       return false;
     };
 
     // Try to find valid assignments starting from each employee
     let success = false;
     for (let start = 0; start < n && !success; start++) {
-      visited.clear();
-      assigned.clear();
       path.length = 0;
-
+      assigned.fill(false);
+      assigned[start] = true;
       path.push(start);
-      assigned.add(start);
-      success = findValidPath(start);
+      success = findValidPath(start, start, 1);
     }
 
     if (!success) {
@@ -96,16 +96,17 @@ export class SecretSantaManager {
     }
 
     // Set current assignments based on found path
-    for (let i = 0; i < path.length; i++) {
+    for (let i = 0; i < n; i++) {
       const currentEmployee = this.employees[path[i]];
-      const childEmployee = this.employees[path[(i + 1) % path.length]];
+      const childEmployee = this.employees[path[(i + 1) % n]];
       currentEmployee.setCurrentChild(childEmployee.getEmail() as Email);
     }
+
   }
 
   getResult(): Array<SecretSantaResult> {
     return this.employees.map((employee) => {
-      const childEmail = employee.getEmail();
+      const childEmail = employee.getCurrentChild();
       const child = this.findEmployeeByEmail(childEmail);
 
       if (!child) {
@@ -122,6 +123,7 @@ export class SecretSantaManager {
       };
     });
   }
+
   findEmployeeByEmail(email: string) {
     return this.employees.find((emp) => emp.getEmail() === email);
   }
@@ -130,7 +132,6 @@ export class SecretSantaManager {
     if (!SecretSantaManager.instance) {
       SecretSantaManager.instance = new SecretSantaManager();
     }
-
     return SecretSantaManager.instance;
   }
 }
