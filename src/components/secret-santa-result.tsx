@@ -25,7 +25,6 @@ export function SecretSantaResult({ data }: SecretSantaResultProps) {
   ];
 
   const handleDownload = () => {
-
     const ws = XLSX.utils.json_to_sheet(
       data.map((row) => ({
         [Headers.EmployeeName]: row.employeeName,
@@ -43,7 +42,7 @@ export function SecretSantaResult({ data }: SecretSantaResultProps) {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="flex justify-between items-center my-4">
+      <div className="flex flex-col gap-4 sm:flex-row justify-between items-center my-4">
         <h1 className="text-2xl font-bold">Result</h1>
         <Button onClick={handleDownload} className="flex items-center gap-2">
           <Download className="h-4 w-4" />

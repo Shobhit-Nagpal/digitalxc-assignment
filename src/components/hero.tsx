@@ -3,7 +3,7 @@ import React from "react";
 
 export function Hero() {
   return (
-    <section className="text-center mt-12 md:mt-32">
+    <section className="text-center mt-12 md:mt-32 px-6">
       <h1 className="text-4xl font-extrabold leading-[1.15] sm:text-6xl">
         Secret Santa Generator
       </h1>

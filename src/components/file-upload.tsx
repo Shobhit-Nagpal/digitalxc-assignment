@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import React, { ChangeEvent } from "react";
 
 interface FileUploadProps {
@@ -5,11 +6,15 @@ interface FileUploadProps {
 }
 
 export function FileUpload({ uploadFile }: FileUploadProps) {
+  const { toast } = useToast();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (!files) {
-      // show toast
+      toast({
+        title: "No files uploaded",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -17,7 +22,7 @@ export function FileUpload({ uploadFile }: FileUploadProps) {
   };
 
   return (
-    <div className="flex items-center justify-center w-full max-w-xl mx-auto">
+    <div className="flex items-center justify-center w-full max-w-xl mx-auto px-6">
       <label
         htmlFor="dropzone-file"
         className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
