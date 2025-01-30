@@ -6,8 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 import { Headers } from "@/consts";
 import type { SecretSantaResult } from "@/types";
+import * as XLSX from "xlsx";
 
 interface SecretSantaResultProps {
   data: SecretSantaResult[];
@@ -21,9 +24,32 @@ export function SecretSantaResult({ data }: SecretSantaResultProps) {
     Headers.SecretChildEmail,
   ];
 
+  const handleDownload = () => {
+
+    const ws = XLSX.utils.json_to_sheet(
+      data.map((row) => ({
+        [Headers.EmployeeName]: row.employeeName,
+        [Headers.EmployeeEmail]: row.employeeEmail,
+        [Headers.SecretChildName]: row.childName,
+        [Headers.SecretChildEmail]: row.childEmail,
+      })),
+    );
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Secret Santa Assignments");
+
+    XLSX.writeFile(wb, "secret-santa-assignments.xlsx");
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <h1 className="my-4 text-2xl font-bold text-center">Result</h1>
+      <div className="flex justify-between items-center my-4">
+        <h1 className="text-2xl font-bold">Result</h1>
+        <Button onClick={handleDownload} className="flex items-center gap-2">
+          <Download className="h-4 w-4" />
+          Download Excel
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
