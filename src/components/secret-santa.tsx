@@ -4,9 +4,9 @@ import { SecretSantaTable } from "./secret-santa-table";
 import { Button } from "./ui/button";
 import { FilePreview } from "./file-preview";
 import { useSecretSanta } from "@/hooks/use-secret-santa";
-import { Loader2 } from "lucide-react";
 import { SecretSantaResult } from "./secret-santa-result";
 import { useEffect, useRef } from "react";
+import { LoadingSpinner } from "./loading-spinner";
 
 export function SecretSanta() {
   const resultRef = useRef<HTMLDivElement | null>(null);
@@ -47,9 +47,9 @@ export function SecretSanta() {
         <FilePreview name={xlsx.name} onClick={() => reset()} />
         <SecretSantaTable headers={headers} data={data} />
         <Button onClick={() => generateSecretSanta(data)} disabled={loading}>
-          Generate
+          {loading ? "Generate" : "Generating..."}
         </Button>
-        {loading && <Loader2 className="h-6 w-6 animate-spin" />}
+        {loading && <LoadingSpinner />}
         {result && <SecretSantaResult data={result} ref={resultRef} />}
       </div>
     </section>
