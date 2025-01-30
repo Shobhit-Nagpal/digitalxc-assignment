@@ -1,10 +1,12 @@
 import fs from "fs/promises";
 import { SecretSantaManager } from "@/core/managers/secret-santa-manager";
-import { expect, test, beforeEach } from "vitest";
+import { expect, test } from "vitest";
+import path from "path";
 import * as XLSX from "xlsx";
 
 async function readExcelFile(filename: string) {
-  const response = await fs.readFile(filename);
+  const filePath = path.join(process.cwd(), "data", filename);
+  const response = await fs.readFile(filePath);
   const workbook = XLSX.read(response, {
     type: "array",
     cellDates: true,
@@ -22,9 +24,9 @@ async function readExcelFile(filename: string) {
 
 test("doesn't have same child as prev year", async () => {
   // Read current year and previous year data from Excel
-  const data = await readExcelFile("/home/shbhtngpl/personal/assesments/digitalxc-assignment/data/Secret-Santa-Game-Result-2023.xlsx");
-  const currentYearData = data.map((row) => row.slice(0,2))
-  const previousYearData = data.map((row) => row.slice(2, row.length))
+  const data = await readExcelFile("Secret-Santa-Game-Result-2023.xlsx");
+  const currentYearData = data.map((row) => row.slice(0, 2));
+  const previousYearData = data.map((row) => row.slice(2, row.length));
 
   // Initialize Secret Santa Manager
   const manager = SecretSantaManager.getInstance();
