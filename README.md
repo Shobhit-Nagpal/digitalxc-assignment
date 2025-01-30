@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Secret Santa Generator
 
-## Getting Started
+A web application built with Next.js that helps organize Secret Santa gift exchanges. Upload your participants' data in Excel, and get randomized Secret Santa assignments while ensuring no one gets the same person as last year!
 
-First, run the development server:
+## Tech Stack
+
+- **Frontend:** Next.js with TypeScript
+- **Styling:** Tailwind CSS with shadcn/ui components
+- **State Management:** React Hooks (Custom hooks for modularity)
+- **Testing:** Vitest
+
+## Features
+
+- Upload participant data via Excel file
+- Generate Secret Santa assignments with constraints:
+  - No self-assignments
+  - No repeat assignments from previous year
+- Download results as Excel file
+- Clean, modern UI with shadcn components
+- Responsive design
+
+## Project Structure
+
+### Frontend
+- Custom hooks for better code organization:
+  - `useXLSX`: Handles Excel file processing
+  - `useSecretSanta`: Manages Secret Santa logic and API calls
+
+### Backend
+- API endpoint for Secret Santa generation
+- Object-Oriented implementation with two main classes:
+  - `SecretSantaEmployee`: Manages individual participant data
+  - `SecretSantaManager`: Handles assignment generation algorithm
+
+## How to Use
+
+1. Prepare your Excel file with the following format:
+   - Required columns: Employee_Name, Employee_EmailID
+   - Optional columns: Secret_Child_Name, Secret_Child_EmailID
+
+2. Upload the Excel file through the web interface
+
+3. The system will:
+   - Validate the file format
+   - Generate new Secret Santa assignments
+   - Ensure no one gets the same person as last year
+   - Return assignments that you can download as Excel
+
+## Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Run tests
+npm test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Algorithm
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The Secret Santa assignment uses:
+- Adjacency Matrix for tracking valid assignments
+- DFS (Depth-First Search) with backtracking to find valid assignments
+- Hamiltonian Cycle to ensure everyone gives and receives exactly one gift
