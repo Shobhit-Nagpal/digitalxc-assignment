@@ -47,7 +47,7 @@ export function SecretSanta() {
         <FilePreview name={xlsx.name} onClick={() => reset()} />
         <SecretSantaTable headers={headers} data={data} />
         <Button onClick={() => generateSecretSanta(data)} disabled={loading}>
-          {loading ? "Generate" : "Generating..."}
+          {loading ? "Generating..." : "Generate"}
         </Button>
         {loading && <LoadingSpinner />}
         {result && <SecretSantaResult data={result} ref={resultRef} />}
