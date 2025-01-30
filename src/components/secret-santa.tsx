@@ -6,9 +6,10 @@ import { FilePreview } from "./file-preview";
 import { useSecretSanta } from "@/hooks/use-secret-santa";
 import { Loader2 } from "lucide-react";
 import { SecretSantaResult } from "./secret-santa-result";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export function SecretSanta() {
+  const resultRef = useRef<HTMLDivElement | null>(null);
   const { xlsx, headers, data, uploadXLSX, reset } = useXLSX();
   const {
     result,
@@ -21,6 +22,16 @@ export function SecretSanta() {
   useEffect(() => {
     resetSecretSanta();
   }, [xlsx]);
+
+  // Auto-scroll when result appears
+  useEffect(() => {
+    if (result && resultRef.current) {
+      resultRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [result]);
 
   if (!xlsx) {
     return (
@@ -39,7 +50,7 @@ export function SecretSanta() {
           Generate
         </Button>
         {loading && <Loader2 className="h-6 w-6 animate-spin" />}
-        {result && <SecretSantaResult data={result} />}
+        {result && <SecretSantaResult data={result} ref={resultRef} />}
       </div>
     </section>
   );

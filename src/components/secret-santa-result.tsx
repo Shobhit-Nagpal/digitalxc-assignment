@@ -9,14 +9,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { Headers } from "@/consts";
-import type { SecretSantaResult } from "@/types";
+import type { SecretSantaResult as TResult } from "@/types";
 import * as XLSX from "xlsx";
+import { forwardRef } from "react";
 
 interface SecretSantaResultProps {
-  data: SecretSantaResult[];
+  data: TResult[];
 }
 
-export function SecretSantaResult({ data }: SecretSantaResultProps) {
+export const SecretSantaResult = forwardRef<
+  HTMLDivElement,
+  SecretSantaResultProps
+>(({ data }, ref) => {
   const headers = [
     Headers.EmployeeName,
     Headers.EmployeeEmail,
@@ -41,7 +45,7 @@ export function SecretSantaResult({ data }: SecretSantaResultProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-2xl mx-auto" ref={ref}>
       <div className="flex flex-col gap-4 sm:flex-row justify-between items-center my-4">
         <h1 className="text-2xl font-bold">Result</h1>
         <Button onClick={handleDownload} className="flex items-center gap-2">
@@ -72,4 +76,4 @@ export function SecretSantaResult({ data }: SecretSantaResultProps) {
       </Table>
     </div>
   );
-}
+});
