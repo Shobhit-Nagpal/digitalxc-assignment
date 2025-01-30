@@ -19,14 +19,36 @@ A web application built with Next.js that helps organize Secret Santa gift excha
 - Clean, modern UI with shadcn components
 - Responsive design
 
+## Setup
+
+1. Clone the repository
+```bash
+git clone https://github.com/Shobhit-Nagpal/digitalxc-assignment.git
+cd digitalxc-assignment
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+The application should now be running at `http://localhost:3000`
+
 ## Project Structure
 
 ### Frontend
+
 - Custom hooks for better code organization:
   - `useXLSX`: Handles Excel file processing
   - `useSecretSanta`: Manages Secret Santa logic and API calls
 
 ### Backend
+
 - API endpoint for Secret Santa generation
 - Object-Oriented implementation with two main classes:
   - `SecretSantaEmployee`: Manages individual participant data
